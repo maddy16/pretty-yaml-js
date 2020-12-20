@@ -7,7 +7,8 @@ function main() {
 	for (const [key, value] of Object.entries(input)) {
 		let cur = output;
 		let field = '';
-		const splittedKeys = key.split('.');
+		const strippedKey = stripeInternalObjects(key);
+		const splittedKeys = strippedKey.split('.');
 		splittedKeys.forEach(function(item,index) {
 			if (field !== '') {
 				if(isArray(field)) {
@@ -30,7 +31,7 @@ function main() {
 		cur[field] = value
 	}
 
-	const result = YAML.stringify(output).replace(/\"/g, '')
+	const result = YAML.stringify(output).replace(/\"/g, '').replace(/\_/g,".");
 	fs.writeFile('./result.yml', result, err => { err && console.log(err)})
 
 }
@@ -88,5 +89,18 @@ function extractArrayElements(key) {
 		name: key.substring(0,key.indexOf('[')),
 		index: parseInt(key.substring(key.indexOf('[')).replace('[','').replace(']',''))
 	};
+}
+
+function stripeInternalObjects(key) {
+	if(key.includes('[') && key.includes(']')) {
+		const start = key.indexOf('[');
+		const end = key.indexOf(']');
+		let substr = key.substring(start+1,end);
+		if(substr.includes('.')) {
+			const underScored = substr.split('.').join('_');
+			key = key.replace(substr,underScored);
+		}
+	}
+	return key;
 }
 main()
