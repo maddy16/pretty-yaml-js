@@ -50,7 +50,7 @@ function adjustArrayData(field, item, value, cur) {
 						[item]: value
 					})
 				} else {
-					cur = cur[fieldName].push(value)
+					cur[fieldName].push(value)
 				}
 
 			} else {
