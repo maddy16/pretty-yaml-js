@@ -22,7 +22,10 @@ function main() {
 				}
 
 			}
-			field = item
+			field = item;
+			if(index===splittedKeys.length-1 && isArray(field)) {
+				cur = adjustArrayData(field, null,value,cur);
+			}
 		});
 		cur[field] = value
 	}
@@ -77,13 +80,13 @@ function adjustArrayData(field, item, value, cur) {
 }
 
 function isArray(key) {
-	return key && key.includes('[') && key.includes(']');
+	return key && key.includes('[') && key.includes(']') && !isNaN(parseInt(key.substring(key.indexOf('[')).replace('[','').replace(']','')));
 }
 
 function extractArrayElements(key) {
 	return {
 		name: key.substring(0,key.indexOf('[')),
 		index: parseInt(key.substring(key.indexOf('[')).replace('[','').replace(']',''))
-	}
+	};
 }
 main()
