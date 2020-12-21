@@ -28,7 +28,10 @@ function main() {
 				cur = adjustArrayData(field, null,value,cur);
 			}
 		});
-		cur[field] = value
+		if(!isArray(field)) {
+			cur[field] = value
+		}
+
 	}
 
 	const result = YAML.stringify(output).replace(/\"/g, '').replace(/\_/g,".");
