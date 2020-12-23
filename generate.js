@@ -10,6 +10,7 @@ function main() {
 		const strippedKey = stripeInternalObjects(key);
 		const splittedKeys = strippedKey.split('.');
 		splittedKeys.forEach(function(item,index) {
+			item = item.replace(/\_/g,".");
 			if (field !== '') {
 				if(isArray(field)) {
 					cur = adjustArrayData(field,item,value,cur);
@@ -34,7 +35,7 @@ function main() {
 
 	}
 
-	const result = YAML.stringify(output).replace(/\"/g, '').replace(/\_/g,".");
+	const result = YAML.stringify(output).replace(/\"/g, '');
 	fs.writeFile('./result.yml', result, err => { err && console.log(err)})
 
 }
